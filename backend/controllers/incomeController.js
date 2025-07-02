@@ -1,10 +1,23 @@
 import Income from "../models/Income.js";
 
 export const getIncomes = async (req, res) => {
-  const incomes = await Income.find({ user: req.user.id });
+  const { start, end } = req.query;
+  const query = { user: req.user.id };
+
+  if (start && end) {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    endDate.setHours(23, 59, 59, 999);
+
+    query.date = {
+      $gte: startDate,
+      $lte: endDate,
+    };
+  }
+
+  const incomes = await Income.find(query);
   res.json(incomes);
 };
-
 export const addIncome = async (req, res) => {
   const { source, category, amount } = req.body;
 

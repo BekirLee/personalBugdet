@@ -1,7 +1,23 @@
-import Expense from '../models/Expense.js';
+import Expense from "../models/Expense.js";
+
+// import Expense from "../models/Expense.js";
 
 export const getExpenses = async (req, res) => {
-  const expenses = await Expense.find({ user: req.user.id });
+  const { start, end } = req.query;
+  const query = { user: req.user.id };
+
+  if (start && end) {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    endDate.setHours(23, 59, 59, 999);
+
+    query.date = {
+      $gte: startDate,
+      $lte: endDate,
+    };
+  }
+
+  const expenses = await Expense.find(query);
   res.json(expenses);
 };
 
@@ -20,5 +36,5 @@ export const addExpense = async (req, res) => {
 
 export const deleteExpense = async (req, res) => {
   await Expense.findByIdAndDelete(req.params.id);
-  res.json({ message: 'Expense deleted' });
+  res.json({ message: "Expense deleted" });
 };

@@ -1,9 +1,6 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import {
-  getExpensesAPI,
-  addExpenseAPI,
-  deleteExpenseAPI,
-} from './expenseAPI';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { getExpensesAPI, addExpenseAPI, deleteExpenseAPI } from "./expenseAPI";
+import axiosInstance from "../../services/axiosInstance";
 
 const initialState = {
   expenses: [],
@@ -11,34 +8,51 @@ const initialState = {
   error: null,
 };
 
-export const fetchExpenses = createAsyncThunk('expense/fetchExpenses', async (_, thunkAPI) => {
-  try {
-    console.log()
-    return await getExpensesAPI();
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
-  }
-});
+// export const fetchExpenses = createAsyncThunk('expense/fetchExpenses', async (_, thunkAPI) => {
+//   try {
+//     console.log()
+//     return await getExpensesAPI();
+//   } catch (error) {
+//     return thunkAPI.rejectWithValue(error.message);
+//   }
+// });
 
-export const addExpense = createAsyncThunk('expense/addExpense', async (expenseData, thunkAPI) => {
-  try {
-    return await addExpenseAPI(expenseData);
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
+export const fetchExpenses = createAsyncThunk(
+  "expense/fetchExpenses",
+  async (dateRange, thunkAPI) => {
+    const params = dateRange
+      ? `?start=${dateRange.start}&end=${dateRange.end}`
+      : "";
+    const res = await axiosInstance.get(`/expense${params}`);
+    return res.data;
   }
-});
+);
 
-export const deleteExpense = createAsyncThunk('expense/deleteExpense', async (id, thunkAPI) => {
-  try {
-    await deleteExpenseAPI(id);
-    return id;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
+export const addExpense = createAsyncThunk(
+  "expense/addExpense",
+  async (expenseData, thunkAPI) => {
+    try {
+      return await addExpenseAPI(expenseData);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
-});
+);
+
+export const deleteExpense = createAsyncThunk(
+  "expense/deleteExpense",
+  async (id, thunkAPI) => {
+    try {
+      await deleteExpenseAPI(id);
+      return id;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
 
 const expenseSlice = createSlice({
-  name: 'expense',
+  name: "expense",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -59,7 +73,9 @@ const expenseSlice = createSlice({
         state.expenses.push(action.payload);
       })
       .addCase(deleteExpense.fulfilled, (state, action) => {
-        state.expenses = state.expenses.filter((item) => item._id !== action.payload);
+        state.expenses = state.expenses.filter(
+          (item) => item._id !== action.payload
+        );
       });
   },
 });
