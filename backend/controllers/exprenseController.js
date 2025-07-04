@@ -38,3 +38,22 @@ export const deleteExpense = async (req, res) => {
   await Expense.findByIdAndDelete(req.params.id);
   res.json({ message: "Expense deleted" });
 };
+
+
+export const updateExpense = async (req, res) => {
+  const { id } = req.params;
+  const {  category, amount } = req.body;
+
+  const expense = await Expense.findById(id);
+  if (!expense) return res.status(404).json({ message: "Income not found" });
+
+  // İzin kontrolü - kullanıcı sadece kendi gelirini değiştirebilmeli
+  if (expense.user.toString() !== req.user.id)
+    return res.status(403).json({ message: "Unauthorized" });
+
+  expense.category = category;
+  expense.amount = amount;
+
+  const updated = await expense.save();
+  res.json(updated);
+};

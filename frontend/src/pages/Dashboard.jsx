@@ -87,9 +87,9 @@ const Dashboard = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#161f2c] text-[#f9fafb] p-6">
+    <div className="min-h-screen bg-[#161f2c] text-[#f9fafb]">
       <Layout />
-      <div className="max-w-screen-xl mx-auto px-4">
+      <div className="max-w-screen-xl mx-auto px-4 mt-10">
         <h1 className="text-4xl font-semibold mb-8 text-center tracking-wide">
           Personal Budget Dashboard
         </h1>
@@ -100,20 +100,20 @@ const Dashboard = () => {
             className="p-2 rounded bg-gray-700 text-white"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            max={endDate || undefined} // Başlangıç tarihi bitişten büyük olmasın
+            max={endDate || undefined}
           />
           <input
             type="date"
             className="p-2 rounded bg-gray-700 text-white"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            min={startDate || undefined} // Bitiş tarihi başlangıçtan küçük olmasın
+            min={startDate || undefined} 
           />
           <button
             className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded"
             onClick={handleFilter}
           >
-            Filtrele
+            Filtr
           </button>
         </div>
 
