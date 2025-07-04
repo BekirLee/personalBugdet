@@ -107,6 +107,9 @@ const ExpenseList = () => {
             </div>
             <div className="flex items-center space-x-3">
               <span className="text-red-300 font-semibold">${item.amount}</span>
+              <div className="text-sm text-gray-400">
+                {new Date(item.date).toLocaleDateString()}
+              </div>
               <button
                 onClick={() => dispatch(deleteExpense(item._id))}
                 className="text-red-300 hover:text-red-500"

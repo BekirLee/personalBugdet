@@ -50,6 +50,24 @@ export const deleteIncome = createAsyncThunk(
   }
 );
 
+export const updateIncome = createAsyncThunk(
+  "income/updateIncome",
+  async ({ id, source, category, amount }, thunkAPI) => {
+    try {
+      const res = await axiosInstance.put(`/income/${id}`, {
+        source,
+        category,
+        amount,
+      });
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
+    }
+  }
+);
+
 const incomeSlice = createSlice({
   name: "income",
   initialState,
@@ -75,6 +93,14 @@ const incomeSlice = createSlice({
         state.incomes = state.incomes.filter(
           (item) => item._id !== action.payload
         );
+      })
+      .addCase(updateIncome.fulfilled, (state, action) => {
+        const index = state.incomes.findIndex(
+          (i) => i._id === action.payload._id
+        );
+        if (index !== -1) {
+          state.incomes[index] = action.payload;
+        }
       });
   },
 });

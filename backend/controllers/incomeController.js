@@ -36,3 +36,23 @@ export const deleteIncome = async (req, res) => {
   await Income.findByIdAndDelete(req.params.id);
   res.json({ message: "Income deleted" });
 };
+
+// PUT /api/income/:id
+export const updateIncome = async (req, res) => {
+  const { id } = req.params;
+  const { source, category, amount } = req.body;
+
+  const income = await Income.findById(id);
+  if (!income) return res.status(404).json({ message: "Income not found" });
+
+  // İzin kontrolü - kullanıcı sadece kendi gelirini değiştirebilmeli
+  if (income.user.toString() !== req.user.id)
+    return res.status(403).json({ message: "Unauthorized" });
+
+  income.source = source;
+  income.category = category;
+  income.amount = amount;
+
+  const updated = await income.save();
+  res.json(updated);
+};
