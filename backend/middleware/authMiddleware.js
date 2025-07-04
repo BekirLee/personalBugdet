@@ -22,28 +22,25 @@
 // export default authMiddleware;
 
 import jwt from "jsonwebtoken";
-
 const authMiddleware = (req, res, next) => {
   const authHeader = req.header("Authorization");
+
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res
-      .status(401)
-      .json({ message: "Token not provided or invalid format" });
+    return res.status(401).json({ message: "Token not provided or invalid format" });
   }
 
   const token = authHeader.split(" ")[1];
-  if (!token) return res.status(401).json({ message: "Token not provided" });
+
+  if (!token) {
+    return res.status(401).json({ message: "Token not provided" });
+  }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("Decoded token:", decoded);
-
-    req.user = decoded.user ? decoded.user : decoded;
-    console.log("User extracted:", req.user);
-
+    req.user = decoded.user;
     next();
   } catch (err) {
-    console.error("JWT Error:", err);
+    console.error("JWT verification error:", err.message);
     return res.status(401).json({ message: "Invalid token" });
   }
 };

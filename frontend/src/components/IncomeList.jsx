@@ -25,6 +25,20 @@ const IncomeList = () => {
     dispatch(fetchIncomes());
   }, [dispatch]);
 
+  const categoryColors = {
+    Salary: "bg-green-700",
+    Freelance: "bg-blue-700",
+    Investment: "bg-purple-700",
+    Other: "bg-gray-700",
+  };
+
+  const badgeColors = {
+    Salary: "bg-green-600",
+    Freelance: "bg-blue-600",
+    Investment: "bg-purple-600",
+    Other: "bg-gray-600",
+  };
+
   const openEditModal = (income) => {
     setEditingIncome(income);
     setSource(income.source);
@@ -117,29 +131,38 @@ const IncomeList = () => {
       {/* Liste */}
       <ul>
         {incomes.map((item) => (
-          <li key={item._id} className="mb-1 flex items-center justify-between">
+          <li
+            key={item._id}
+            className={`mb-2 p-3 rounded flex items-center justify-between ${
+              categoryColors[item.category] || "bg-gray-800"
+            }`}
+          >
             <div>
-              <span className="font-semibold">{item.source}</span> -{" "}
-              <span className="italic text-gray-400">
+              <span className="font-semibold">{item.source}</span>{" "}
+              <span
+                className={`text-xs text-white px-2 py-1 rounded ml-2 ${
+                  badgeColors[item.category] || "bg-gray-600"
+                }`}
+              >
                 {item.category || "No category"}
               </span>{" "}
               - <span>${item.amount}</span>
-              <div className="text-sm text-gray-400">
+              <div className="text-sm text-gray-300">
                 {new Date(item.date).toLocaleDateString()}
               </div>
             </div>
-            <div>
+            <div className="flex items-center space-x-2">
               <button
                 onClick={() => openEditModal(item)}
-                className="mr-2 bg-yellow-400 text-white px-2 py-1 rounded hover:bg-yellow-500"
+                className="bg-yellow-400 text-white px-2 py-1 rounded hover:bg-yellow-500"
               >
                 Edit
               </button>
               <button
                 onClick={() => dispatch(deleteIncome(item._id))}
-                className="text-red-600 hover:text-red-800"
+                className="text-red-300 hover:text-red-500"
               >
-                X
+                ✕
               </button>
             </div>
           </li>
