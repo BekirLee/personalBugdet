@@ -39,7 +39,7 @@ function App() {
           element={
             token && role === "admin" ? (
               <AdminDashboard />
-            ) : (
+            ) : ( 
               <Navigate to="/login" />
             )
           }
