@@ -40,3 +40,13 @@
 .read-the-docs {
   color: #888;
 }
+
+
+/* Scrollbar'ı gizleyen özel yardımcı sınıf */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* Internet Explorer */
+  scrollbar-width: none;     /* Firefox */
+}

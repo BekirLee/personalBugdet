@@ -105,12 +105,28 @@ const IncomeList = () => {
             className="p-2 rounded border border-gray-300"
             required
           />
-          <input
+          <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            placeholder="Category (optional)"
             className="p-2 rounded border border-gray-300"
-          />
+            required
+          >
+            <option value="" style={{ background: "gray" }}>
+              Select Category
+            </option>
+            <option value="Salary" style={{ background: "gray" }}>
+              Salary
+            </option>
+            <option value="Freelance" style={{ background: "gray" }}>
+              Freelance
+            </option>
+            <option value="Investment" style={{ background: "gray" }}>
+              Investment
+            </option>
+            <option value="Other" style={{ background: "gray" }}>
+              Other
+            </option>
+          </select>
           <input
             value={amount}
             onChange={(e) => setAmount(e.target.value)}

@@ -39,6 +39,23 @@ export const addExpense = createAsyncThunk(
   }
 );
 
+export const updateExpense = createAsyncThunk(
+  "income/updateExpense",
+  async ({ id, category, amount }, thunkAPI) => {
+    try {
+      const res = await axiosInstance.put(`/expense/${id}`, {
+        category,
+        amount,
+      });
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
+    }
+  }
+);
+
 export const deleteExpense = createAsyncThunk(
   "expense/deleteExpense",
   async (id, thunkAPI) => {
